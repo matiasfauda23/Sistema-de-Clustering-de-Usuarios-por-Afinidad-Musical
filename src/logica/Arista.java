@@ -9,6 +9,13 @@ public class Arista implements Comparable<Arista> {
     
     //Constructor
     public Arista(Usuario usuario1, Usuario usuario2, int peso) {
+        if (usuario1 == null || usuario2 == null) {
+            throw new IllegalArgumentException("Los usuarios no pueden ser nulos");
+        }
+        if (usuario1.equals(usuario2)) {
+            throw new IllegalArgumentException(
+                "No se puede crear una arista entre el mismo usuario (loop)");
+        }       
         this.usuario1 = usuario1;
         this.usuario2 = usuario2;
         this.peso = peso;
