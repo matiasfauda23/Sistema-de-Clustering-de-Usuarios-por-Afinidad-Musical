@@ -27,5 +27,6 @@ public class UsuarioTest {
         assertThrows(IllegalArgumentException.class,
                 () -> new Usuario("Pepe", 6, 3, 4, 5));
     }
+    
 }
 
