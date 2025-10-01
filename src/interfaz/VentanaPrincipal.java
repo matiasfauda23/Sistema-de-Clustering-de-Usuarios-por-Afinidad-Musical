@@ -3,12 +3,15 @@ package interfaz;
 import logica.*;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.util.*;
 
 public class VentanaPrincipal extends JFrame {
     
-    // Componentes de la UI
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	// Componentes de la UI
     private DefaultListModel<String> modeloUsuarios;
     private JList<String> listaUsuarios;
     private JButton btnAgregarUsuario;
