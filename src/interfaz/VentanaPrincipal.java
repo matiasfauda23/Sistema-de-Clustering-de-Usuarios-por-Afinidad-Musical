@@ -68,7 +68,7 @@ public class VentanaPrincipal extends JFrame {
         btnAgregarUsuario.addActionListener(e -> {
             String nombre = JOptionPane.showInputDialog(this, "Nombre:");
             if (nombre != null && !nombre.trim().isEmpty()) {
-                // Valores de intereses (se pueden mejorar con sliders o comboBox)
+               
                 int tango = pedirValor("Tango");
                 int folklore = pedirValor("Folklore");
                 int rock = pedirValor("Rock");
