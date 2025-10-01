@@ -33,6 +33,32 @@ public class Grafo {
                Math.abs(a.getValorUrbano() - b.getValorUrbano());
     }
     
+ // Divide el MST en dos grupos al eliminar la arista de mayor peso
+    public List<List<Usuario>> obtenerGrupos() {
+        // Paso 1: construir el MST
+        List<Arista> mst = kruskal();
+
+        // Paso 2: eliminar la arista de mayor peso
+        eliminarAristaMayorPeso(mst);
+
+        // Paso 3: reconstruir componentes usando Union-Find
+        UnionFind uf = new UnionFind(usuarios);
+        for (Arista a : mst) {
+            uf.unir(a.getUsuario1(), a.getUsuario2());
+        }
+
+        // Paso 4: agrupar usuarios según su raíz
+        Map<Usuario, List<Usuario>> grupos = new HashMap<>();
+        for (Usuario u : usuarios) {
+            Usuario raiz = uf.encontrarRaiz(u);
+            grupos.putIfAbsent(raiz, new ArrayList<>());
+            grupos.get(raiz).add(u);
+        }
+
+        return new ArrayList<>(grupos.values());
+    }
+
+    
     // Algoritmo de Kruskal para árbol generador mínimo
     public List<Arista> kruskal() {
         // Ordenar las aristas por peso (similaridad) de menor a mayor
@@ -59,7 +85,14 @@ public class Grafo {
         return arbolGeneradorMinimo;
     }
     
-    // Método para mostrar el grafo completo
+    public void eliminarAristaMayorPeso(List<Arista> arbol) {
+        if (arbol == null || arbol.isEmpty()) {
+            return;
+        }
+        Arista aristaMayor = Collections.max(arbol); // usa compareTo
+        arbol.remove(aristaMayor);
+    }
+
     public void mostrarGrafoConsola() {
         System.out.println("=== GRAFO DE USUARIOS ===");
         System.out.println("Usuarios (" + usuarios.size() + "):");
@@ -81,7 +114,6 @@ public class Grafo {
         }
     }
     
-    // Método para mostrar el árbol generador mínimo
     public void mostrarArbolGeneradorMinimo() {
         List<Arista> arbol = kruskal();
         
@@ -98,6 +130,79 @@ public class Grafo {
         }
         
         System.out.println("Similaridad total del árbol: " + similaridadTotal);
+    }
+    
+    public String mostrarInfoGrafo() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("=== GRAFO DE USUARIOS ===\n");
+        sb.append("Usuarios (" + usuarios.size() + "):\n");
+
+        for (int i = 0; i < usuarios.size(); i++) {
+            Usuario u = usuarios.get(i);
+            sb.append(i + ": " + u.getNombre() +
+                    " [T:" + u.getValorTango() +
+                    " F:" + u.getValorFolklore() +
+                    " R:" + u.getValorRock() +
+                    " U:" + u.getValorUrbano() + "]\n");
+        }
+
+        sb.append("\nAristas (" + aristas.size() + "):\n");
+        for (Arista arista : aristas) {
+            sb.append(arista.getUsuario1().getNombre() + " <--> " +
+                      arista.getUsuario2().getNombre() +
+                      " [Similaridad: " + arista.getPeso() + "]\n");
+        }
+        return sb.toString();
+    }
+
+    public String mostrarInfoMST() {
+        List<Arista> arbol = kruskal();
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("=== ÁRBOL GENERADOR MÍNIMO ===\n");
+        sb.append("Número de aristas en el árbol: " + arbol.size() + "\n");
+        sb.append("Aristas del árbol:\n");
+
+        int similaridadTotal = 0;
+        for (Arista arista : arbol) {
+            sb.append(arista.getUsuario1().getNombre() + " <--> " +
+                      arista.getUsuario2().getNombre() +
+                      " [Similaridad: " + arista.getPeso() + "]\n");
+            similaridadTotal += arista.getPeso();
+        }
+        sb.append("Similaridad total del árbol: " + similaridadTotal + "\n");
+
+        return sb.toString();
+    }
+
+    public String mostrarInfoGruposConEstadisticas() {
+        List<List<Usuario>> grupos = obtenerGrupos();
+        StringBuilder sb = new StringBuilder();
+
+        int g = 1;
+        for (List<Usuario> grupo : grupos) {
+            sb.append("\n=== Grupo " + g + " ===\n");
+            for (Usuario u : grupo) {
+                sb.append(" - " + u.getNombre() + "\n");
+            }
+
+            // Promedios de intereses
+            double sumT = 0, sumF = 0, sumR = 0, sumU = 0;
+            for (Usuario u : grupo) {
+                sumT += u.getValorTango();
+                sumF += u.getValorFolklore();
+                sumR += u.getValorRock();
+                sumU += u.getValorUrbano();
+            }
+            int n = grupo.size();
+            sb.append("Promedio Tango: " + (sumT / n) + "\n");
+            sb.append("Promedio Folklore: " + (sumF / n) + "\n");
+            sb.append("Promedio Rock: " + (sumR / n) + "\n");
+            sb.append("Promedio Urbano: " + (sumU / n) + "\n");
+            g++;
+        }
+
+        return sb.toString();
     }
 
     //Getters

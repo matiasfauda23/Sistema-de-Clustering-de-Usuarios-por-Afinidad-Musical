@@ -3,27 +3,31 @@ package logica;
 import java.util.*;
 
 public class Main {
-    public static void main(String[] args) {
-        // Crear usuarios de ejemplo
-        List<Usuario> usuarios = Arrays.asList(
-            new Usuario("Juan", 5, 3, 2, 4),
-            new Usuario("Maria", 3, 4, 5, 2),
-            new Usuario("Pedro", 2, 5, 3, 4),
-            new Usuario("Ana", 4, 2, 4, 3),
-            new Usuario("Luis", 3, 3, 4, 2)
-        );
+	
+	public static void main(String[] args) {
+	    List<Usuario> usuarios = new ArrayList<>();
+	    usuarios.add(new Usuario("Ana", 5,2,3,1));
+	    usuarios.add(new Usuario("Luis", 4,2,5,1));
+	    usuarios.add(new Usuario("Marta", 1,5,2,3));
+	    usuarios.add(new Usuario("Pedro", 2,4,1,4));
 
-        // Crear grafo completo
-        Grafo grafo = new Grafo(usuarios);
-        
-        // Mostrar grafo completo
-        System.out.println("=== GRAFO COMPLETO ===");
-        grafo.mostrarGrafoConsola();
-        
-        System.out.println("\n" + "=".repeat(50) + "\n");
-        
-        // Construir y mostrar árbol generador mínimo
-        grafo.mostrarArbolGeneradorMinimo();
-    }
+	    Grafo grafo = new Grafo(usuarios);
+
+	    grafo.mostrarGrafoConsola();
+	    grafo.mostrarArbolGeneradorMinimo();
+
+	    System.out.println("\n=== Grupos ===");
+	    List<List<Usuario>> grupos = grafo.obtenerGrupos();
+
+	    int i = 1;
+	    for (List<Usuario> grupo : grupos) {
+	        System.out.println("Grupo " + i + ":");
+	        for (Usuario u : grupo) {
+	            System.out.println(" - " + u.getNombre());
+	        }
+	        i++;
+	    }
+	}
+
 }
 
