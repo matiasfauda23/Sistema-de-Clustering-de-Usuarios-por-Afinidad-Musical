@@ -2,8 +2,12 @@ package interfaz;
 
 import logica.*;
 import javax.swing.*;
-import java.awt.*;
-import java.util.*;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.util.List;
+import java.util.ArrayList;
+
+
 
 public class VentanaPrincipal extends JFrame {
     
@@ -89,9 +93,30 @@ public class VentanaPrincipal extends JFrame {
                 JOptionPane.showMessageDialog(this, "Debe haber al menos 2 usuarios.");
                 return;
             }
-            Grafo grafo = new Grafo(usuarios);
-            String resultado = grafo.mostrarInfoGruposConEstadisticas();
-            areaResultado.setText(resultado);
+
+            // Preguntar al usuario cuántos grupos quiere
+            String input = JOptionPane.showInputDialog(this, 
+                "¿Cuántos grupos desea generar?");
+            try {
+                int k = Integer.parseInt(input);
+                Grafo grafo = new Grafo(usuarios);
+                List<List<Usuario>> grupos = grafo.obtenerGrupos(k);
+
+                // Mostrar el resultado
+                StringBuilder resultado = new StringBuilder();
+                int g = 1;
+                for (List<Usuario> grupo : grupos) {
+                    resultado.append("\n=== Grupo " + g + " ===\n");
+                    for (Usuario u : grupo) {
+                        resultado.append(" - " + u.getNombre() + "\n");
+                    }
+                    g++;
+                }
+                areaResultado.setText(resultado.toString());
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Número de grupos inválido.");
+            }
         });
     }
     

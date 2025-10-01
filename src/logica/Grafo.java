@@ -32,31 +32,51 @@ public class Grafo {
                Math.abs(a.getValorRock() - b.getValorRock()) +
                Math.abs(a.getValorUrbano() - b.getValorUrbano());
     }
-    
- // Divide el MST en dos grupos al eliminar la arista de mayor peso
-    public List<List<Usuario>> obtenerGrupos() {
+   
+    // Divide el MST en dos grupos al eliminar la arista de mayor peso
+    public List<List<Usuario>> obtenerGrupos(int k) {
+    	
+        if (k < 1 || k > usuarios.size()) {
+            throw new IllegalArgumentException("Número de grupos inválido");
+        }
         // Paso 1: construir el MST
         List<Arista> mst = kruskal();
 
-        // Paso 2: eliminar la arista de mayor peso
-        eliminarAristaMayorPeso(mst);
+        // 2. Eliminar (k-1) aristas más pesadas
+        for (int i = 0; i < k - 1; i++) {
+            eliminarAristaMayorPeso(mst);
+        }
 
-        // Paso 3: reconstruir componentes usando Union-Find
+        // 3. Reconstruir componentes usando Union-Find
         UnionFind uf = new UnionFind(usuarios);
         for (Arista a : mst) {
             uf.unir(a.getUsuario1(), a.getUsuario2());
         }
 
-        // Paso 4: agrupar usuarios según su raíz
+        // 4. Agrupar usuarios por su raíz
         Map<Usuario, List<Usuario>> grupos = new HashMap<>();
         for (Usuario u : usuarios) {
             Usuario raiz = uf.encontrarRaiz(u);
-            grupos.putIfAbsent(raiz, new ArrayList<>());
+            if (!grupos.containsKey(raiz)) {
+                grupos.put(raiz, new ArrayList<Usuario>());
+            }
             grupos.get(raiz).add(u);
         }
 
         return new ArrayList<>(grupos.values());
     }
+    
+    
+    
+  /*  // Comparator de mayor a menor
+    public static final Comparator<Arista> POR_PESO_DESC =
+        new Comparator<Arista>() {
+            @Override
+            public int compare(Arista a, Arista b) {
+                return Integer.compare(b.getPeso(), a.getPeso());
+            }
+        };*/
+ 
 
     
     // Algoritmo de Kruskal para árbol generador mínimo
@@ -68,7 +88,7 @@ public class Grafo {
         // Inicializar Union-Find
         UnionFind uf = new UnionFind(usuarios);
         
-        // Lista para almacenar las aristas del árbol generador mínimo
+        // Lista para almacenar las aristas del arbol generador mínimo
         List<Arista> arbolGeneradorMinimo = new ArrayList<>();
 
         // Procesar aristas en orden ascendente
@@ -176,7 +196,7 @@ public class Grafo {
     }
 
     public String mostrarInfoGruposConEstadisticas() {
-        List<List<Usuario>> grupos = obtenerGrupos();
+        List<List<Usuario>> grupos = obtenerGrupos(2);
         StringBuilder sb = new StringBuilder();
 
         int g = 1;

@@ -58,7 +58,7 @@ public class GrafoTest {
         List<Usuario> usuarios = Arrays.asList(u1, u2, u3, u4);
 
         Grafo g = new Grafo(usuarios);
-        List<List<Usuario>> grupos = g.obtenerGrupos();
+        List<List<Usuario>> grupos = g.obtenerGrupos(2);
 
         assertEquals(2, grupos.size());
         int totalUsuarios = grupos.get(0).size() + grupos.get(1).size();
