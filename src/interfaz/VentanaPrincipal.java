@@ -2,11 +2,14 @@ package interfaz;
 
 import logica.*;
 import javax.swing.*;
+
+import controlador.ControladorAfinidad;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 //import java.awt.GridLayout;
 import java.util.List;
-import java.util.ArrayList;
+//import java.util.ArrayList;
 
 
 
@@ -22,18 +25,17 @@ public class VentanaPrincipal extends JFrame {
     private JButton btnAgregarUsuario;
     private JButton btnEjecutarAlgoritmo;
     private JPanel panelResultados;
+    private ControladorAfinidad controlador;
 
-    
-    // Datos de negocio
-    private java.util.List<Usuario> usuarios;
-    
+    //Metodo constructor
     public VentanaPrincipal() {
         super("Afinidad Musical - TP2");
-        this.usuarios = new ArrayList<>();
+        this.controlador = new ControladorAfinidad();
         inicializarComponentes();
         configurarVentana();
         eventos();
     }
+    
     
     private void inicializarComponentes() {
         // Panel usuarios
@@ -77,7 +79,7 @@ public class VentanaPrincipal extends JFrame {
     }
     
     private void eventos() {
-        // Cargar usuario con diálogo simple
+        // Cargar usuario 
         btnAgregarUsuario.addActionListener(e -> {
             String nombre = JOptionPane.showInputDialog(this, "Nombre:");
             if (nombre != null && !nombre.trim().isEmpty()) {
@@ -87,34 +89,35 @@ public class VentanaPrincipal extends JFrame {
                 int rock = pedirValor("Rock");
                 int urbano = pedirValor("Urbano");
                 
-                Usuario u = new Usuario(nombre, tango, folklore, rock, urbano);
-                usuarios.add(u);
+                // Agregrego usuarios con sus valores al controlador
+                controlador.agregarUsuario(nombre, tango, folklore, rock, urbano);
+
+                // Solo actualizo la vista
                 modeloUsuarios.addElement(nombre);
             }
         });
         
         // Ejecutar algoritmo y mostrar grupos
         btnEjecutarAlgoritmo.addActionListener(e -> {
-            if (usuarios.size() < 2) {
+            if (controlador.getUsuarios().size() < 2) {
                 JOptionPane.showMessageDialog(this, "Debe haber al menos 2 usuarios.");
                 return;
             }
 
-            Grafo grafo = new Grafo(usuarios);
-
-            // Preguntar cuántos grupos quiere generar
+            // Pido al usuario cuantos grupos quiere
             String input = JOptionPane.showInputDialog(this, "¿Cuántos grupos desea generar?");
             try {
                 int k = Integer.parseInt(input);
 
-                if (k < 1 || k > usuarios.size()) {
+                if (k < 1 || k > controlador.getUsuarios().size()) {
                     JOptionPane.showMessageDialog(this, "Número de grupos inválido.");
                     return;
                 }
 
-                List<List<Usuario>> grupos = grafo.obtenerGrupos(k);
+                // calculo los grupos con el controaldor
+                List<List<Usuario>> grupos = controlador.calcularGrupos(k);
 
-                // limpiar resultados anteriores
+                // limpiar resultados anteriores en la UI
                 panelResultados.removeAll();
 
                 int g = 1;
@@ -136,8 +139,7 @@ public class VentanaPrincipal extends JFrame {
                     g++;
                 }
 
-
-                // refrescar UI
+                // refrescar la UI
                 panelResultados.revalidate();
                 panelResultados.repaint();
 
@@ -146,6 +148,7 @@ public class VentanaPrincipal extends JFrame {
             }
         });
     }
+
 
     
     private int pedirValor(String genero) {
