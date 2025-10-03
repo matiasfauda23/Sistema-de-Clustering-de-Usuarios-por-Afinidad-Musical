@@ -18,11 +18,15 @@ public class ControladorAfinidad {
         usuarios.add(nuevo);
     }
 
+    public void agregarUsuarioDesdeJSON(Usuario usuario){
+        usuarios.add(usuario);
+    }
+    
     public List<List<Usuario>> calcularGrupos(int k) {
         Grafo grafo = new Grafo(usuarios);
         return grafo.obtenerGrupos(k);
     }
-
+    
     public List<Usuario> getUsuarios() {
         return usuarios;
     }

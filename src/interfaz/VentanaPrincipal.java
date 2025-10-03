@@ -8,6 +8,9 @@ import controlador.ControladorAfinidad;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.List;
 
 
@@ -22,6 +25,8 @@ public class VentanaPrincipal extends JFrame {
 	private JButton btnAgregarUsuario;
 	private JButton btnEjecutarAlgoritmo;
 	private JPanel panelResultados;
+	private JButton btnCargar;
+
 	// Controlador de la lógica
 	private ControladorAfinidad controlador;
 
@@ -98,8 +103,36 @@ public class VentanaPrincipal extends JFrame {
 			}
 		});
 
+		// Cargar usuario desde archivo JSON		
+		btnCargar.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        JFileChooser fileChooser = new JFileChooser();
+		        
+		        javax.swing.filechooser.FileNameExtensionFilter filtro = 
+		            new javax.swing.filechooser.FileNameExtensionFilter("Archivos JSON", "json");
+		        fileChooser.setFileFilter(filtro);
+		        
+		        int seleccion = fileChooser.showOpenDialog(null);
+		        if (seleccion == JFileChooser.APPROVE_OPTION) {
+		            File archivo = fileChooser.getSelectedFile();
+		            ArchivoJSON manejador = new ArchivoJSON();
+		            List<Usuario> usuariosCargados = manejador.leerUsuarios(archivo.getAbsolutePath());
+		            
+		            if (usuariosCargados != null && !usuariosCargados.isEmpty()) {
+		                for (Usuario usuario : usuariosCargados) {
+		                    controlador.agregarUsuarioDesdeJSON(usuario);
+		                    modeloUsuarios.addElement(usuario.getNombre());
+		                }
+		                JOptionPane.showMessageDialog(null, 
+		                    "Se cargaron " + usuariosCargados.size() + " usuarios correctamente");
+		            } else {
+		                JOptionPane.showMessageDialog(null, 
+		                    "Error al cargar usuarios", "Error", JOptionPane.ERROR_MESSAGE);
+		            }
+		        }
+		    }
+		});	
 	}
-
 
 	//Metodos auxiliares
 	private int pedirValor(String genero) {
@@ -124,6 +157,12 @@ public class VentanaPrincipal extends JFrame {
 	    btnAgregarUsuario.setFont(new Font("Verdana", Font.BOLD, 14));
 	    btnAgregarUsuario.setBackground(new Color(180, 210, 250));
 	    btnAgregarUsuario.setFocusPainted(false);
+	    
+	    // Boton para cargar usuario desde archivo JSON
+	    btnCargar = new JButton("Cargar desde JSON");
+	    btnCargar.setFont(new Font("Verdana", Font.BOLD, 14));
+	    btnCargar.setBackground(new Color(180, 210, 250));
+	    btnCargar.setFocusPainted(false);
 
 	    // Label con fuente y color personalizados
 	    JLabel lblUsuarios = new JLabel("Usuarios cargados:");
@@ -137,6 +176,7 @@ public class VentanaPrincipal extends JFrame {
 	    panelIzq.add(lblUsuarios, BorderLayout.NORTH);
 	    panelIzq.add(scrollUsuarios, BorderLayout.CENTER);
 	    panelIzq.add(btnAgregarUsuario, BorderLayout.SOUTH);
+	    panelIzq.add(btnCargar, BorderLayout.NORTH);
 
 	    return panelIzq;
 	}
