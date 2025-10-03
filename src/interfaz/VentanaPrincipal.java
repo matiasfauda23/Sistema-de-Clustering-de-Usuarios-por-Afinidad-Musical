@@ -186,18 +186,5 @@ public class VentanaPrincipal extends JFrame {
     }
 
 
-
-    
-    // Metodo main para iniciar la aplicación
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        SwingUtilities.invokeLater(VentanaPrincipal::new);
-    }
-
 }
 
