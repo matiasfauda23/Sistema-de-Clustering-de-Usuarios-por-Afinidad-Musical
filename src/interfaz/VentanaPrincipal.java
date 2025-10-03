@@ -212,5 +212,6 @@ public class VentanaPrincipal extends JFrame {
 		panelResultados.repaint();
 	}
 
+
 }
 
