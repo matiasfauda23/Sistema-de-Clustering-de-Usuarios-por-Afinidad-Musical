@@ -3,7 +3,8 @@ package interfaz;
 import logica.*;
 import javax.swing.*;
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
+import java.awt.Color;
+//import java.awt.GridLayout;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -20,7 +21,8 @@ public class VentanaPrincipal extends JFrame {
     private JList<String> listaUsuarios;
     private JButton btnAgregarUsuario;
     private JButton btnEjecutarAlgoritmo;
-    private JTextArea areaResultado;
+    private JPanel panelResultados;
+
     
     // Datos de negocio
     private java.util.List<Usuario> usuarios;
@@ -43,9 +45,10 @@ public class VentanaPrincipal extends JFrame {
         btnEjecutarAlgoritmo = new JButton("Ejecutar Algoritmo");
         
         // Panel resultado
-        areaResultado = new JTextArea(15, 30);
-        areaResultado.setEditable(false);
-        JScrollPane scrollResultado = new JScrollPane(areaResultado);
+        panelResultados = new JPanel();
+        panelResultados.setLayout(new BoxLayout(panelResultados, BoxLayout.Y_AXIS));
+        JScrollPane scrollResultado = new JScrollPane(panelResultados);
+
         
         // Layout principal
         JPanel panelIzq = new JPanel(new BorderLayout());
@@ -58,16 +61,19 @@ public class VentanaPrincipal extends JFrame {
         panelDer.add(scrollResultado, BorderLayout.CENTER);
         panelDer.add(btnEjecutarAlgoritmo, BorderLayout.SOUTH);
         
-        getContentPane().setLayout(new GridLayout(1, 2));
-        getContentPane().add(panelIzq);
-        getContentPane().add(panelDer);
+        //Usar JSplitPane para dividir la ventana
+        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panelIzq, panelDer);
+        split.setDividerLocation(200); 
+        getContentPane().add(split);
+
     }
     
     private void configurarVentana() {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        pack();
-        setLocationRelativeTo(null);
-        setVisible(true);
+    	setSize(800, 600); // ancho x alto inicial
+    	setLocationRelativeTo(null);
+    	setVisible(true);
+    	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
     }
     
     private void eventos() {
@@ -94,31 +100,53 @@ public class VentanaPrincipal extends JFrame {
                 return;
             }
 
-            // Preguntar al usuario cuántos grupos quiere
-            String input = JOptionPane.showInputDialog(this, 
-                "¿Cuántos grupos desea generar?");
+            Grafo grafo = new Grafo(usuarios);
+
+            // Preguntar cuántos grupos quiere generar
+            String input = JOptionPane.showInputDialog(this, "¿Cuántos grupos desea generar?");
             try {
                 int k = Integer.parseInt(input);
-                Grafo grafo = new Grafo(usuarios);
+
+                if (k < 1 || k > usuarios.size()) {
+                    JOptionPane.showMessageDialog(this, "Número de grupos inválido.");
+                    return;
+                }
+
                 List<List<Usuario>> grupos = grafo.obtenerGrupos(k);
 
-                // Mostrar el resultado
-                StringBuilder resultado = new StringBuilder();
+                // limpiar resultados anteriores
+                panelResultados.removeAll();
+
                 int g = 1;
                 for (List<Usuario> grupo : grupos) {
-                    resultado.append("\n=== Grupo " + g + " ===\n");
+                    JPanel grupoPanel = new JPanel();
+                    grupoPanel.setLayout(new BoxLayout(grupoPanel, BoxLayout.Y_AXIS));
+                    grupoPanel.setBorder(BorderFactory.createTitledBorder("Grupo " + g));
+                    grupoPanel.setBackground(new Color(230, 240, 255));
+
                     for (Usuario u : grupo) {
-                        resultado.append(" - " + u.getNombre() + "\n");
+                        grupoPanel.add(new JLabel(u.getNombre()));
                     }
+
+                    // guardo el grupo en un contenedor que ocupa todo el ancho
+                    JPanel contenedor = new JPanel(new BorderLayout());
+                    contenedor.add(grupoPanel, BorderLayout.CENTER);
+
+                    panelResultados.add(contenedor);
                     g++;
                 }
-                areaResultado.setText(resultado.toString());
 
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Número de grupos inválido.");
+
+                // refrescar UI
+                panelResultados.revalidate();
+                panelResultados.repaint();
+
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Debe ingresar un número válido.");
             }
         });
     }
+
     
     private int pedirValor(String genero) {
         while (true) {
@@ -131,9 +159,16 @@ public class VentanaPrincipal extends JFrame {
         }
     }
     
-    // Main para probar la UI
+    // Metodo main para iniciar la aplicación
     public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         SwingUtilities.invokeLater(VentanaPrincipal::new);
     }
+
 }
 
