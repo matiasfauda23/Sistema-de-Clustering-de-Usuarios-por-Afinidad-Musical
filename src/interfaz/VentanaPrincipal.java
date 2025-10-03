@@ -7,17 +7,13 @@ import controlador.ControladorAfinidad;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-//import java.awt.GridLayout;
 import java.util.List;
-//import java.util.ArrayList;
 
 
 
 public class VentanaPrincipal extends JFrame {
     
-    /**
-	 * 
-	 */
+    
 	private static final long serialVersionUID = 1L;
 	// Componentes de la UI
     private DefaultListModel<String> modeloUsuarios;
@@ -25,6 +21,7 @@ public class VentanaPrincipal extends JFrame {
     private JButton btnAgregarUsuario;
     private JButton btnEjecutarAlgoritmo;
     private JPanel panelResultados;
+    // Controlador de la lógica
     private ControladorAfinidad controlador;
 
     //Metodo constructor
@@ -38,37 +35,14 @@ public class VentanaPrincipal extends JFrame {
     
     
     private void inicializarComponentes() {
-        // Panel usuarios
-        modeloUsuarios = new DefaultListModel<>();
-        listaUsuarios = new JList<>(modeloUsuarios);
-        JScrollPane scrollUsuarios = new JScrollPane(listaUsuarios);
-        
-        btnAgregarUsuario = new JButton("Agregar Usuario");
-        btnEjecutarAlgoritmo = new JButton("Ejecutar Algoritmo");
-        
-        // Panel resultado
-        panelResultados = new JPanel();
-        panelResultados.setLayout(new BoxLayout(panelResultados, BoxLayout.Y_AXIS));
-        JScrollPane scrollResultado = new JScrollPane(panelResultados);
+        JPanel panelIzq = crearPanelUsuarios();
+        JPanel panelDer = crearPanelResultados();
 
-        
-        // Layout principal
-        JPanel panelIzq = new JPanel(new BorderLayout());
-        panelIzq.add(new JLabel("Usuarios cargados:"), BorderLayout.NORTH);
-        panelIzq.add(scrollUsuarios, BorderLayout.CENTER);
-        panelIzq.add(btnAgregarUsuario, BorderLayout.SOUTH);
-        
-        JPanel panelDer = new JPanel(new BorderLayout());
-        panelDer.add(new JLabel("Resultado:"), BorderLayout.NORTH);
-        panelDer.add(scrollResultado, BorderLayout.CENTER);
-        panelDer.add(btnEjecutarAlgoritmo, BorderLayout.SOUTH);
-        
-        //Usar JSplitPane para dividir la ventana
         JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panelIzq, panelDer);
-        split.setDividerLocation(200); 
+        split.setDividerLocation(200);
         getContentPane().add(split);
-
     }
+
     
     private void configurarVentana() {
     	setSize(800, 600); // ancho x alto inicial
@@ -77,9 +51,9 @@ public class VentanaPrincipal extends JFrame {
     	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     }
-    
+    //Interaccion entre usuario y controlador
     private void eventos() {
-        // Cargar usuario 
+        // Agregar usuario y sus valores
         btnAgregarUsuario.addActionListener(e -> {
             String nombre = JOptionPane.showInputDialog(this, "Nombre:");
             if (nombre != null && !nombre.trim().isEmpty()) {
@@ -104,7 +78,6 @@ public class VentanaPrincipal extends JFrame {
                 return;
             }
 
-            // Pido al usuario cuantos grupos quiere
             String input = JOptionPane.showInputDialog(this, "¿Cuántos grupos desea generar?");
             try {
                 int k = Integer.parseInt(input);
@@ -114,43 +87,20 @@ public class VentanaPrincipal extends JFrame {
                     return;
                 }
 
-                // calculo los grupos con el controaldor
                 List<List<Usuario>> grupos = controlador.calcularGrupos(k);
 
-                // limpiar resultados anteriores en la UI
-                panelResultados.removeAll();
-
-                int g = 1;
-                for (List<Usuario> grupo : grupos) {
-                    JPanel grupoPanel = new JPanel();
-                    grupoPanel.setLayout(new BoxLayout(grupoPanel, BoxLayout.Y_AXIS));
-                    grupoPanel.setBorder(BorderFactory.createTitledBorder("Grupo " + g));
-                    grupoPanel.setBackground(new Color(230, 240, 255));
-
-                    for (Usuario u : grupo) {
-                        grupoPanel.add(new JLabel(u.getNombre()));
-                    }
-
-                    // guardo el grupo en un contenedor que ocupa todo el ancho
-                    JPanel contenedor = new JPanel(new BorderLayout());
-                    contenedor.add(grupoPanel, BorderLayout.CENTER);
-
-                    panelResultados.add(contenedor);
-                    g++;
-                }
-
-                // refrescar la UI
-                panelResultados.revalidate();
-                panelResultados.repaint();
+                // Delego la visualizacion a metodo externo
+                mostrarGrupos(grupos);
 
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Debe ingresar un número válido.");
             }
         });
+
     }
 
 
-    
+    //Metodos auxiliares
     private int pedirValor(String genero) {
         while (true) {
             String input = JOptionPane.showInputDialog(this, "Interés en " + genero + " (1-5):");
@@ -161,6 +111,82 @@ public class VentanaPrincipal extends JFrame {
             JOptionPane.showMessageDialog(this, "Debe ser un número entre 1 y 5.");
         }
     }
+    
+    private JPanel crearPanelUsuarios() {
+        modeloUsuarios = new DefaultListModel<>();
+        listaUsuarios = new JList<>(modeloUsuarios);
+        JScrollPane scrollUsuarios = new JScrollPane(listaUsuarios);
+
+        btnAgregarUsuario = new JButton("Agregar Usuario");
+
+        JPanel panelIzq = new JPanel(new BorderLayout());
+        panelIzq.add(new JLabel("Usuarios cargados:"), BorderLayout.NORTH);
+        panelIzq.add(scrollUsuarios, BorderLayout.CENTER);
+        panelIzq.add(btnAgregarUsuario, BorderLayout.SOUTH);
+
+        return panelIzq;
+    }
+
+    private JPanel crearPanelResultados() {
+        panelResultados = new JPanel();
+        panelResultados.setLayout(new BoxLayout(panelResultados, BoxLayout.Y_AXIS));
+        JScrollPane scrollResultado = new JScrollPane(panelResultados);
+
+        btnEjecutarAlgoritmo = new JButton("Ejecutar Algoritmo");
+
+        JPanel panelDer = new JPanel(new BorderLayout());
+        panelDer.add(new JLabel("Resultado:"), BorderLayout.NORTH);
+        panelDer.add(scrollResultado, BorderLayout.CENTER);
+        panelDer.add(btnEjecutarAlgoritmo, BorderLayout.SOUTH);
+
+        return panelDer;
+    }
+    
+    private void mostrarGrupos(List<List<Usuario>> grupos) {
+        panelResultados.removeAll();
+
+        int g = 1;
+        for (List<Usuario> grupo : grupos) {
+            JPanel grupoPanel = new JPanel();
+            grupoPanel.setLayout(new BoxLayout(grupoPanel, BoxLayout.Y_AXIS));
+            grupoPanel.setBorder(BorderFactory.createTitledBorder("Grupo " + g));
+            grupoPanel.setBackground(new Color(230, 240, 255));
+
+            // Mostrar usuarios
+            for (Usuario u : grupo) {
+                grupoPanel.add(new JLabel("• " + u.getNombre()));
+            }
+
+            // Calcular promedios
+            double sumT = 0, sumF = 0, sumR = 0, sumU = 0;
+            for (Usuario u : grupo) {
+                sumT += u.getValorTango();
+                sumF += u.getValorFolklore();
+                sumR += u.getValorRock();
+                sumU += u.getValorUrbano();
+            }
+            int n = grupo.size();
+
+            // Mostrar estadísticas debajo
+            grupoPanel.add(new JLabel("Promedio Tango: " + (sumT / n)));
+            grupoPanel.add(new JLabel("Promedio Folklore: " + (sumF / n)));
+            grupoPanel.add(new JLabel("Promedio Rock: " + (sumR / n)));
+            grupoPanel.add(new JLabel("Promedio Urbano: " + (sumU / n)));
+
+            // Envolver en contenedor que ocupa todo el ancho
+            JPanel contenedor = new JPanel(new BorderLayout());
+            contenedor.add(grupoPanel, BorderLayout.CENTER);
+
+            panelResultados.add(contenedor);
+            g++;
+        }
+
+        panelResultados.revalidate();
+        panelResultados.repaint();
+    }
+
+
+
     
     // Metodo main para iniciar la aplicación
     public static void main(String[] args) {
