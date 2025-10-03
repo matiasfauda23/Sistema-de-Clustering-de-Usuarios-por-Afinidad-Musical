@@ -7,6 +7,7 @@ import controlador.ControladorAfinidad;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.util.List;
 
 
@@ -113,33 +114,59 @@ public class VentanaPrincipal extends JFrame {
 	}
 
 	private JPanel crearPanelUsuarios() {
-		modeloUsuarios = new DefaultListModel<>();
-		listaUsuarios = new JList<>(modeloUsuarios);
-		JScrollPane scrollUsuarios = new JScrollPane(listaUsuarios);
+	    modeloUsuarios = new DefaultListModel<>();
+	    listaUsuarios = new JList<>(modeloUsuarios);
+	    listaUsuarios.setFont(new Font("Arial", Font.PLAIN, 14)); 
+	    JScrollPane scrollUsuarios = new JScrollPane(listaUsuarios);
 
-		btnAgregarUsuario = new JButton("Agregar Usuario");
+	    // Boton con fuente personalizada
+	    btnAgregarUsuario = new JButton("Agregar Usuario");
+	    btnAgregarUsuario.setFont(new Font("Verdana", Font.BOLD, 14));
+	    btnAgregarUsuario.setBackground(new Color(180, 210, 250));
+	    btnAgregarUsuario.setFocusPainted(false);
 
-		JPanel panelIzq = new JPanel(new BorderLayout());
-		panelIzq.add(new JLabel("Usuarios cargados:"), BorderLayout.NORTH);
-		panelIzq.add(scrollUsuarios, BorderLayout.CENTER);
-		panelIzq.add(btnAgregarUsuario, BorderLayout.SOUTH);
+	    // Label con fuente y color personalizados
+	    JLabel lblUsuarios = new JLabel("Usuarios cargados:");
+	    lblUsuarios.setFont(new Font("Arial", Font.BOLD, 16));
+	    lblUsuarios.setForeground(Color.DARK_GRAY);
 
-		return panelIzq;
+	    // Panel izquierdo con fondo azul claro
+	    JPanel panelIzq = new JPanel(new BorderLayout());
+	    panelIzq.setBackground(new Color(200, 230, 255));
+
+	    panelIzq.add(lblUsuarios, BorderLayout.NORTH);
+	    panelIzq.add(scrollUsuarios, BorderLayout.CENTER);
+	    panelIzq.add(btnAgregarUsuario, BorderLayout.SOUTH);
+
+	    return panelIzq;
 	}
 
+
 	private JPanel crearPanelResultados() {
-		panelResultados = new JPanel();
-		panelResultados.setLayout(new BoxLayout(panelResultados, BoxLayout.Y_AXIS));
-		JScrollPane scrollResultado = new JScrollPane(panelResultados);
+	    panelResultados = new JPanel();
+	    panelResultados.setLayout(new BoxLayout(panelResultados, BoxLayout.Y_AXIS));
+	    JScrollPane scrollResultado = new JScrollPane(panelResultados);
 
-		btnEjecutarAlgoritmo = new JButton("Ejecutar Algoritmo");
+	    // Boton con fuente personalizada
+	    btnEjecutarAlgoritmo = new JButton("Ejecutar Algoritmo");
+	    btnEjecutarAlgoritmo.setFont(new Font("Verdana", Font.BOLD, 14)); 
+	    btnEjecutarAlgoritmo.setBackground(new Color(180, 210, 250)); 
+	    btnEjecutarAlgoritmo.setFocusPainted(false); // quita el borde al hacer click
 
-		JPanel panelDer = new JPanel(new BorderLayout());
-		panelDer.add(new JLabel("Resultado:"), BorderLayout.NORTH);
-		panelDer.add(scrollResultado, BorderLayout.CENTER);
-		panelDer.add(btnEjecutarAlgoritmo, BorderLayout.SOUTH);
+	    // Label con fuente y color personalizados
+	    JLabel lblResultado = new JLabel("Resultado:");
+	    lblResultado.setFont(new Font("Arial", Font.BOLD, 16)); 
+	    lblResultado.setForeground(Color.DARK_GRAY); // texto gris oscuro
 
-		return panelDer;
+	    // Panel derecho con fondo azul claro
+	    JPanel panelDer = new JPanel(new BorderLayout());
+	    panelDer.setBackground(new Color(200, 230, 255));
+
+	    panelDer.add(lblResultado, BorderLayout.NORTH);
+	    panelDer.add(scrollResultado, BorderLayout.CENTER);
+	    panelDer.add(btnEjecutarAlgoritmo, BorderLayout.SOUTH);
+
+	    return panelDer;
 	}
 
 	private void mostrarGrupos(List<List<Usuario>> grupos) {
@@ -167,7 +194,7 @@ public class VentanaPrincipal extends JFrame {
 			}
 			int n = grupo.size();
 
-			// Mostrar estadísticas debajo
+			// Mostrar estadisticas debajo
 			grupoPanel.add(new JLabel("Promedio Tango: " + (sumT / n)));
 			grupoPanel.add(new JLabel("Promedio Folklore: " + (sumF / n)));
 			grupoPanel.add(new JLabel("Promedio Rock: " + (sumR / n)));
