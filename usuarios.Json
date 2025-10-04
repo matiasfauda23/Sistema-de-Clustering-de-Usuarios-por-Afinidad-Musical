@@ -1,10 +1,10 @@
 [
   {
     "nombre": "Tobias",
-    "valorTango": 5,
-    "valorFolklore": 3,
-    "valorRock": 2,
-    "valorUrbano": 4
+    "tango": 2,
+    "folklore": 3,
+    "rock": 4,
+    "urbano": 3
   },
   {
     "nombre": "Matias",

@@ -11,6 +11,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -26,6 +27,7 @@ public class VentanaPrincipal extends JFrame {
 	private JButton btnEjecutarAlgoritmo;
 	private JPanel panelResultados;
 	private JButton btnCargar;
+	private JButton btnMostrarAGM;
 
 	// Controlador de la lógica
 	private ControladorAfinidad controlador;
@@ -97,12 +99,15 @@ public class VentanaPrincipal extends JFrame {
 
 				// Delego la visualizacion a metodo externo
 				mostrarGrupos(grupos);
+				
+				//crear GragoVisual
+				CrearGrafoVisual(k);
 
 			} catch (NumberFormatException ex) {
 				JOptionPane.showMessageDialog(this, "Debe ingresar un número válido.");
 			}
 		});
-
+			
 		// Cargar usuario desde archivo JSON		
 		btnCargar.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
@@ -132,6 +137,45 @@ public class VentanaPrincipal extends JFrame {
 		        }
 		    }
 		});	
+	}
+    //crea el grafo visual y lo muestra (revisar si se puede cambiar el metodo)
+	private void CrearGrafoVisual(int grupos) {
+		btnMostrarAGM.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        
+		            
+		            System.setProperty("org.graphstream.ui", "swing");
+		            
+		            GrafoVisual grafoVisual = new GrafoVisual();
+		            Grafo grafo = new Grafo(controlador.getUsuarios());
+		            
+		            // Agregar nodos
+		            for (Usuario usuario : controlador.getUsuarios()) {
+		                grafoVisual.agregarNodo(usuario.getNombre(), usuario.getNombre());
+		            }
+		            
+		            // Obtener AGM y dividirlo en k grupos
+		            List<Arista> agm = grafo.kruskal();
+		            
+		            // Eliminar las (k-1) aristas más pesadas
+		            for (int i = 0; i < grupos - 1; i++) {
+		                grafo.eliminarAristaMayorPeso(agm);
+		            }
+		            
+		            // Agregar las aristas restantes
+		            int contador = 0;
+		            for (Arista arista : agm) {
+		                String nodo1 = arista.getUsuario1().getNombre();
+		                String nodo2 = arista.getUsuario2().getNombre();
+		                double peso = arista.getPeso();
+		                
+		                grafoVisual.agregarAristaConPeso("arista" + contador, nodo1, nodo2, peso);
+		                contador++;
+		            }
+		            grafoVisual.mostrar();		            		         
+		    }
+		});
+		
 	}
 
 	//Metodos auxiliares
@@ -191,12 +235,18 @@ public class VentanaPrincipal extends JFrame {
 	    btnEjecutarAlgoritmo = new JButton("Ejecutar Algoritmo");
 	    btnEjecutarAlgoritmo.setFont(new Font("Verdana", Font.BOLD, 14)); 
 	    btnEjecutarAlgoritmo.setBackground(new Color(180, 210, 250)); 
-	    btnEjecutarAlgoritmo.setFocusPainted(false); // quita el borde al hacer click
+	    btnEjecutarAlgoritmo.setFocusPainted(false); // quita el borde al hacer click	    
 
 	    // Label con fuente y color personalizados
 	    JLabel lblResultado = new JLabel("Resultado:");
 	    lblResultado.setFont(new Font("Arial", Font.BOLD, 16)); 
 	    lblResultado.setForeground(Color.DARK_GRAY); // texto gris oscuro
+	    
+	    // Boton para mostrar AGM
+	    btnMostrarAGM = new JButton("Mostrar AGM");
+	    btnMostrarAGM.setFont(new Font("Verdana", Font.BOLD, 14));
+	    btnMostrarAGM.setBackground(new Color(180, 210, 250));
+	    btnMostrarAGM.setFocusPainted(false); // quita el borde al hacer click
 
 	    // Panel derecho con fondo azul claro
 	    JPanel panelDer = new JPanel(new BorderLayout());
@@ -205,6 +255,7 @@ public class VentanaPrincipal extends JFrame {
 	    panelDer.add(lblResultado, BorderLayout.NORTH);
 	    panelDer.add(scrollResultado, BorderLayout.CENTER);
 	    panelDer.add(btnEjecutarAlgoritmo, BorderLayout.SOUTH);
+	    panelDer.add(btnMostrarAGM, BorderLayout.EAST);
 
 	    return panelDer;
 	}

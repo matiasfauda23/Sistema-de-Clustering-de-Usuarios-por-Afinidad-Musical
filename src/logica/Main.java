@@ -15,5 +15,3 @@ public class Main {
         SwingUtilities.invokeLater(VentanaPrincipal::new);
     }
 }
-
-
