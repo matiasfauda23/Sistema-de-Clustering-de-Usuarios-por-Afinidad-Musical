@@ -17,7 +17,15 @@ public class UsuarioTest {
         assertEquals(5, u.getValorRock());
         assertEquals(1, u.getValorUrbano());
     }
+    @Test
+    public void testCalcularSimilaridadCon() {
+        Usuario u1 = new Usuario("mateo", 5, 3, 2, 1);
+        Usuario u2 = new Usuario("Matias", 4, 3, 2, 1);
 
+        int resultado = u1.calcularSimilaridadCon(u2);
+
+        assertEquals(1, resultado); // Solo difieren en tango
+    }
     @Test
     public void noPermiteValorMenorA1() {
         assertThrows(IllegalArgumentException.class,

@@ -23,6 +23,12 @@ public class Usuario {
         this.urbano = urbano;
     }
     
+    public int calcularSimilaridadCon(Usuario otro) {
+        return Math.abs(this.tango -otro.tango) + Math.abs(this.folklore - otro.folklore) +
+               Math.abs(this.rock - otro.rock) +Math.abs(this.urbano -otro.urbano);
+    }
+
+    
     
     //Getters
     public String getNombre() {
