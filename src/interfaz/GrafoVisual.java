@@ -50,19 +50,19 @@ public class GrafoVisual {
         viewer.setCloseFramePolicy(Viewer.CloseFramePolicy.HIDE_ONLY);
     }
     
-    // Obtener el componente visual para embeber en un JPanel
-    public javax.swing.JComponent obtenerComponenteVisual() {
-        System.setProperty("org.graphstream.ui", "swing");
-        
-        Viewer viewer = new SwingViewer(grafo, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
-        viewer.enableAutoLayout();
-        
-        // Obtener la vista (el componente Swing)
-        org.graphstream.ui.view.View view = viewer.addDefaultView(false);
-        
-        // Retornar como JComponent para agregar a un JPanel
-        return (javax.swing.JComponent) view;
-    }
+//    // Obtener el componente visual para embeber en un JPanel
+//    public javax.swing.JComponent obtenerComponenteVisual() {
+//        System.setProperty("org.graphstream.ui", "swing");
+//        
+//        Viewer viewer = new SwingViewer(grafo, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
+//        viewer.enableAutoLayout();
+//        
+//        // Obtener la vista (el componente Swing)
+//        org.graphstream.ui.view.View view = viewer.addDefaultView(false);
+//        
+//        // Retornar como JComponent para agregar a un JPanel
+//        return (javax.swing.JComponent) view;
+//    }
         
     public static void main(String[] args) {
         // Necesario para evitar problemas con Swing

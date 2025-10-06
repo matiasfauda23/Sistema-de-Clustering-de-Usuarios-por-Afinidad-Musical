@@ -13,7 +13,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
+import interfaz.GrafoVisual;
 
 
 public class VentanaPrincipal extends JFrame {
@@ -49,6 +49,7 @@ public class VentanaPrincipal extends JFrame {
 		JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panelIzq, panelDer);
 		split.setDividerLocation(200);
 		getContentPane().add(split);
+		btnMostrarAGM.setEnabled(false);
 	}
 
 
@@ -89,6 +90,7 @@ public class VentanaPrincipal extends JFrame {
 			String input = JOptionPane.showInputDialog(this, "¿Cuántos grupos desea generar?");
 			try {
 				int k = Integer.parseInt(input);
+				controlador.setNumeroGrupos(k); // Valor predeterminado
 
 				if (k < 1 || k > controlador.getUsuarios().size()) {
 					JOptionPane.showMessageDialog(this, "Número de grupos inválido.");
@@ -100,8 +102,8 @@ public class VentanaPrincipal extends JFrame {
 				// Delego la visualizacion a metodo externo
 				mostrarGrupos(grupos);
 				
-				//crear GragoVisual
-				CrearGrafoVisual(k);
+				// Habilitar boton para mostrar AGM
+				btnMostrarAGM.setEnabled(true);
 
 			} catch (NumberFormatException ex) {
 				JOptionPane.showMessageDialog(this, "Debe ingresar un número válido.");
@@ -136,47 +138,53 @@ public class VentanaPrincipal extends JFrame {
 		            }
 		        }
 		    }
-		});	
-	}
-    //crea el grafo visual y lo muestra (revisar si se puede cambiar el metodo)
-	private void CrearGrafoVisual(int grupos) {
-		btnMostrarAGM.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		        
-		            
-		            System.setProperty("org.graphstream.ui", "swing");
-		            
-		            GrafoVisual grafoVisual = new GrafoVisual();
-		            Grafo grafo = new Grafo(controlador.getUsuarios());
-		            
-		            // Agregar nodos
-		            for (Usuario usuario : controlador.getUsuarios()) {
-		                grafoVisual.agregarNodo(usuario.getNombre(), usuario.getNombre());
-		            }
-		            
-		            // Obtener AGM y dividirlo en k grupos
-		            List<Arista> agm = grafo.kruskal();
-		            
-		            // Eliminar las (k-1) aristas más pesadas
-		            for (int i = 0; i < grupos - 1; i++) {
-		                grafo.eliminarAristaMayorPeso(agm);
-		            }
-		            
-		            // Agregar las aristas restantes
-		            int contador = 0;
-		            for (Arista arista : agm) {
-		                String nodo1 = arista.getUsuario1().getNombre();
-		                String nodo2 = arista.getUsuario2().getNombre();
-		                double peso = arista.getPeso();
-		                
-		                grafoVisual.agregarAristaConPeso("arista" + contador, nodo1, nodo2, peso);
-		                contador++;
-		            }
-		            grafoVisual.mostrar();		            		         
-		    }
 		});
 		
-	}
+		
+			btnMostrarAGM.addActionListener(e -> {
+			    try {
+			        GrafoVisual grafo = controlador.obtenerGrafoVisualDividido(controlador.getNumeroGrupos());
+			        grafo.mostrar();
+			    } catch (IllegalArgumentException ex) {
+			        JOptionPane.showMessageDialog(this, ex.getMessage());
+			    }
+			});
+//			        
+//			            
+//			            System.setProperty("org.graphstream.ui", "swing");
+//			            
+//			            GrafoVisual grafoVisual = new GrafoVisual();
+//			            Grafo grafo = new Grafo(controlador.getUsuarios());
+//			            
+//			            // Agregar nodos
+//			            for (Usuario usuario : controlador.getUsuarios()) {
+//			                grafoVisual.agregarNodo(usuario.getNombre(), usuario.getNombre());
+//			            }
+//			            
+//			            // Obtener AGM y dividirlo en k grupos
+//			            List<Arista> agm = grafo.kruskal();
+//			            
+//			            // Eliminar las (k-1) aristas más pesadas
+//			            for (int i = 0; i < grupos - 1; i++) {
+//			                grafo.eliminarAristaMayorPeso(agm);
+//			            }
+//			            
+//			            // Agregar las aristas restantes
+//			            int contador = 0;
+//			            for (Arista arista : agm) {
+//			                String nodo1 = arista.getUsuario1().getNombre();
+//			                String nodo2 = arista.getUsuario2().getNombre();
+//			                double peso = arista.getPeso();
+//			                
+//			                grafoVisual.agregarAristaConPeso("arista" + contador, nodo1, nodo2, peso);
+//			                contador++;
+//			            }
+//			            grafoVisual.mostrar();		            		         
+			    }
+			
+	
+    //crea el grafo visual y lo muestra (revisar si se puede cambiar el metodo)
+
 
 	//Metodos auxiliares
 	private int pedirValor(String genero) {
