@@ -284,20 +284,13 @@ public class VentanaPrincipal extends JFrame {
 			}
 
 			// Calcular promedios
-			double sumT = 0, sumF = 0, sumR = 0, sumU = 0;
-			for (Usuario u : grupo) {
-				sumT += u.getValorTango();
-				sumF += u.getValorFolklore();
-				sumR += u.getValorRock();
-				sumU += u.getValorUrbano();
-			}
-			int n = grupo.size();
-
+			Estadistica agrupador = new Estadistica(grupo);
+			
 			// Mostrar estadisticas debajo
-			grupoPanel.add(new JLabel("Promedio Tango: " + (sumT / n)));
-			grupoPanel.add(new JLabel("Promedio Folklore: " + (sumF / n)));
-			grupoPanel.add(new JLabel("Promedio Rock: " + (sumR / n)));
-			grupoPanel.add(new JLabel("Promedio Urbano: " + (sumU / n)));
+			grupoPanel.add(new JLabel("Promedio Tango: " + agrupador.getPromedioTango()));
+			grupoPanel.add(new JLabel("Promedio Folklore: " + agrupador.getPromedioFolklore()));
+			grupoPanel.add(new JLabel("Promedio Rock: " + agrupador.getPromedioRock()));
+			grupoPanel.add(new JLabel("Promedio Urbano: " + agrupador.getPromedioUrbano()));
 
 			// Envolver en contenedor que ocupa todo el ancho
 			JPanel contenedor = new JPanel(new BorderLayout());
