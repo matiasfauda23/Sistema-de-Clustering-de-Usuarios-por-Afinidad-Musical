@@ -123,8 +123,7 @@ public class VentanaPrincipal extends JFrame {
 		        int seleccion = fileChooser.showOpenDialog(null);
 		        if (seleccion == JFileChooser.APPROVE_OPTION) {
 		            File archivo = fileChooser.getSelectedFile();
-		            ArchivoJSON manejador = new ArchivoJSON();
-		            List<Usuario> usuariosCargados = manejador.leerUsuarios(archivo.getAbsolutePath());
+		            List<Usuario> usuariosCargados = controlador.cargarUsuariosDesdeArchivo(archivo.getAbsolutePath());
 		            
 		            if (usuariosCargados != null && !usuariosCargados.isEmpty()) {
 		                for (Usuario usuario : usuariosCargados) {
@@ -137,6 +136,7 @@ public class VentanaPrincipal extends JFrame {
 		                JOptionPane.showMessageDialog(null, 
 		                    "Error al cargar usuarios", "Error", JOptionPane.ERROR_MESSAGE);
 		            }
+
 		        }
 		    }
 		});

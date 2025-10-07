@@ -6,6 +6,7 @@ import logica.Grafo;
 import logica.Usuario;
 import interfaz.GrafoVisual; // cambiar de package
 import logica.UnionFind;
+import logica.ArchivoJSON;
 import logica.Arista;
 
 public class ControladorAfinidad {
@@ -46,6 +47,12 @@ public class ControladorAfinidad {
     public int convertirCantidadGrupos(String input) { //pasa de string a int
         return Integer.parseInt(input);
     }
+    
+    public List<Usuario> cargarUsuariosDesdeArchivo(String ruta) {
+        ArchivoJSON manejador = new ArchivoJSON();
+        return manejador.leerUsuarios(ruta);
+    }
+
 
 
     
