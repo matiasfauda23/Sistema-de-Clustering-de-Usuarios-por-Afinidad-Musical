@@ -214,39 +214,42 @@ public class VentanaPrincipal extends JFrame {
 
 
 	private JPanel crearPanelResultados() {
-	    panelResultados = new JPanel();
-	    panelResultados.setLayout(new BoxLayout(panelResultados, BoxLayout.Y_AXIS));
+	    panelResultados = crearPanelResultadosInterno();
 	    JScrollPane scrollResultado = new JScrollPane(panelResultados);
 
-	    // Boton con fuente personalizada
-	    btnEjecutarAlgoritmo = new JButton("Ejecutar Algoritmo");
-	    btnEjecutarAlgoritmo.setFont(new Font("Verdana", Font.BOLD, 14)); 
-	    btnEjecutarAlgoritmo.setBackground(new Color(180, 210, 250)); 
-	    btnEjecutarAlgoritmo.setFocusPainted(false); // quita el borde al hacer click	    
+	    JLabel lblResultado = crearLabelResultado();
+	    btnEjecutarAlgoritmo = crearBoton("Ejecutar Algoritmo");
+	    btnMostrarAGM = crearBoton("Mostrar AGM");
 
-	    // Label con fuente y color personalizados
-	    JLabel lblResultado = new JLabel("Resultado:");
-	    lblResultado.setFont(new Font("Arial", Font.BOLD, 16)); 
-	    lblResultado.setForeground(Color.DARK_GRAY); // texto gris oscuro
-	    
-	    // Boton para mostrar AGM
-	    btnMostrarAGM = new JButton("Mostrar AGM");
-	    btnMostrarAGM.setFont(new Font("Verdana", Font.BOLD, 14));
-	    btnMostrarAGM.setBackground(new Color(180, 210, 250));
-	    btnMostrarAGM.setFocusPainted(false); // quita el borde al hacer click
+	    // Panel para apilar botones
+	    JPanel panelBotones = crearPanelBotones(btnEjecutarAlgoritmo, btnMostrarAGM);
 
-	    // Panel derecho con fondo azul claro
+	    // Panel derecho principal
 	    JPanel panelDer = new JPanel(new BorderLayout());
 	    panelDer.setBackground(new Color(200, 230, 255));
 
 	    panelDer.add(lblResultado, BorderLayout.NORTH);
 	    panelDer.add(scrollResultado, BorderLayout.CENTER);
-	    panelDer.add(btnEjecutarAlgoritmo, BorderLayout.SOUTH);
-	    panelDer.add(btnMostrarAGM, BorderLayout.EAST);
+	    panelDer.add(panelBotones, BorderLayout.SOUTH);
 
 	    return panelDer;
 	}
+
 	
+	private JPanel crearPanelResultadosInterno() {
+	    JPanel panel = new JPanel();
+	    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+	    panel.setBackground(Color.WHITE);
+	    return panel;
+	}
+	private JLabel crearLabelResultado() {
+	    JLabel lbl = new JLabel("Resultado:");
+	    lbl.setFont(new Font("Arial", Font.BOLD, 16));
+	    lbl.setForeground(Color.DARK_GRAY);
+	    lbl.setHorizontalAlignment(SwingConstants.CENTER);
+	    return lbl;
+	}
+
 	private JPanel crearPanelBotones(JButton... botones) {
 	    JPanel panel = new JPanel(new GridLayout(botones.length, 1, 5, 5));
 	    panel.setBackground(new Color(200, 230, 255));
