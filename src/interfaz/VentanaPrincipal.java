@@ -92,10 +92,11 @@ public class VentanaPrincipal extends JFrame {
 				int k = Integer.parseInt(input);
 				controlador.setNumeroGrupos(k); // Valor predeterminado
 
-				if (k < 1 || k > controlador.getUsuarios().size()) {
-					JOptionPane.showMessageDialog(this, "Número de grupos inválido.");
-					return;
+				if (!controlador.esNumeroDeGruposValido(k)) {
+				    JOptionPane.showMessageDialog(this, "Número de grupos inválido.");
+				    return;
 				}
+
 
 				List<List<Usuario>> grupos = controlador.calcularGrupos(k);
 

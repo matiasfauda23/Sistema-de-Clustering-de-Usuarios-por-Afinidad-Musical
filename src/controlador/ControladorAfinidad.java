@@ -30,6 +30,12 @@ public class ControladorAfinidad {
         return grafo.obtenerGrupos(k);
     }
     
+    public boolean esNumeroDeGruposValido(int k) {
+        int cantidadUsuarios = usuarios.size();
+        return k >= 1 && k <= cantidadUsuarios;
+    }
+
+    
     public GrafoVisual obtenerGrafoVisualDividido(int k) {
     	
     	this.ultimoK = k; // Guardar el valor de k
