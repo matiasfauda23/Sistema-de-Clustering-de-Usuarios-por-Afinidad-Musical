@@ -33,17 +33,18 @@ public class ControladorAfinidad {
     
     public boolean esNumeroDeGruposValido(int k) {
         int cantidadUsuarios = usuarios.size();
-        return k >= 1 && k <= cantidadUsuarios;
+        return k > 1 && k <= cantidadUsuarios;
     }
     
     public boolean validarCantidadGrupos(String input) {
         try {
             int k = Integer.parseInt(input);
-            return k >= 1 && k <= usuarios.size();
+            return k > 1 && k <= usuarios.size();
         } catch (NumberFormatException e) {
             return false;
         }
     }
+    
     public int convertirCantidadGrupos(String input) { //pasa de string a int
         return Integer.parseInt(input);
     }
@@ -77,9 +78,7 @@ public class ControladorAfinidad {
         }
         return resumenes;
     }
-
-
-    
+ 
     public GrafoVisual obtenerGrafoVisualDividido(int k) {
     	
     	this.ultimoK = k; // Guardar el valor de k
@@ -131,12 +130,17 @@ public class ControladorAfinidad {
         return usuarios;
     }
         
-    public void setNumeroGrupos(int k) {
-        if (k < 1 || k > usuarios.size()) {
-            throw new IllegalArgumentException("Número de grupos inválido");
+    public List<List<Usuario>> generarGrupos(int k) {
+        if (!esNumeroDeGruposValido(k)) {
+            throw new IllegalArgumentException(
+                "El número de grupos debe ser mayor que 1 y menor o igual a la cantidad de usuarios."
+            );
         }
         this.ultimoK = k;
+        return calcularGrupos(k);
     }
+
+
     
     public int getNumeroGrupos() {
         return this.ultimoK;
