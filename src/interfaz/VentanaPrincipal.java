@@ -189,6 +189,29 @@ public class VentanaPrincipal extends JFrame {
 	}
 
 
+	private JPanel crearPanelResultados() {
+	    panelResultados = crearPanelResultadosInterno();
+	    JScrollPane scrollResultado = new JScrollPane(panelResultados);
+
+	    JLabel lblResultado = crearLabelResultado();
+	    btnEjecutarAlgoritmo = crearBoton("Ejecutar Algoritmo");
+	    btnMostrarAGM = crearBoton("Mostrar AGM");
+
+	    // Panel para apilar botones
+	    JPanel panelBotones = crearPanelBotones(btnEjecutarAlgoritmo, btnMostrarAGM);
+
+	    // Panel derecho principal
+	    JPanel panelDer = new JPanel(new BorderLayout());
+	    panelDer.setBackground(new Color(200, 230, 255));
+
+	    panelDer.add(lblResultado, BorderLayout.NORTH);
+	    panelDer.add(scrollResultado, BorderLayout.CENTER);
+	    panelDer.add(panelBotones, BorderLayout.SOUTH);
+
+	    return panelDer;
+	}
+
+
 	//Metodos auxiliares 
 
 	private JList<String> crearListaUsuarios() {
@@ -212,36 +235,13 @@ public class VentanaPrincipal extends JFrame {
 	    return btn;
 	}
 
-
-	private JPanel crearPanelResultados() {
-	    panelResultados = crearPanelResultadosInterno();
-	    JScrollPane scrollResultado = new JScrollPane(panelResultados);
-
-	    JLabel lblResultado = crearLabelResultado();
-	    btnEjecutarAlgoritmo = crearBoton("Ejecutar Algoritmo");
-	    btnMostrarAGM = crearBoton("Mostrar AGM");
-
-	    // Panel para apilar botones
-	    JPanel panelBotones = crearPanelBotones(btnEjecutarAlgoritmo, btnMostrarAGM);
-
-	    // Panel derecho principal
-	    JPanel panelDer = new JPanel(new BorderLayout());
-	    panelDer.setBackground(new Color(200, 230, 255));
-
-	    panelDer.add(lblResultado, BorderLayout.NORTH);
-	    panelDer.add(scrollResultado, BorderLayout.CENTER);
-	    panelDer.add(panelBotones, BorderLayout.SOUTH);
-
-	    return panelDer;
-	}
-
-	
 	private JPanel crearPanelResultadosInterno() {
 	    JPanel panel = new JPanel();
 	    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 	    panel.setBackground(Color.WHITE);
 	    return panel;
 	}
+	
 	private JLabel crearLabelResultado() {
 	    JLabel lbl = new JLabel("Resultado:");
 	    lbl.setFont(new Font("Arial", Font.BOLD, 16));
