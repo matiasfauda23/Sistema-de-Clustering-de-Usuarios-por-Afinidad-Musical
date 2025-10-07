@@ -7,6 +7,7 @@ import logica.Usuario;
 import interfaz.GrafoVisual; // cambiar de package
 import logica.ArchivoJSON;
 import logica.Arista;
+import logica.Estadistica;
 
 public class ControladorAfinidad {
     private List<Usuario> usuarios;
@@ -52,6 +53,30 @@ public class ControladorAfinidad {
         return manejador.leerUsuarios(ruta);
     }
 
+    public List<String> obtenerResumenGrupos(List<List<Usuario>> grupos) {
+        List<String> resumenes = new ArrayList<>();
+
+        int g = 1;
+        for (List<Usuario> grupo : grupos) {
+            Estadistica e = new Estadistica(grupo);
+            StringBuilder sb = new StringBuilder();
+
+            sb.append("Grupo ").append(g).append("\n");
+            sb.append("Integrantes:\n");
+            for (Usuario u : grupo) {
+                sb.append(" • ").append(u.getNombre()).append("\n");
+            }
+
+            sb.append("Promedio Tango: ").append(e.getPromedioTango()).append("\n");
+            sb.append("Promedio Folklore: ").append(e.getPromedioFolklore()).append("\n");
+            sb.append("Promedio Rock: ").append(e.getPromedioRock()).append("\n");
+            sb.append("Promedio Urbano: ").append(e.getPromedioUrbano()).append("\n");
+
+            resumenes.add(sb.toString());
+            g++;
+        }
+        return resumenes;
+    }
 
 
     

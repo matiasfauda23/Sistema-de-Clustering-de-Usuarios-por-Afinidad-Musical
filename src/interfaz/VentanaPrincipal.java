@@ -274,40 +274,28 @@ public class VentanaPrincipal extends JFrame {
 
 
 	private void mostrarGrupos(List<List<Usuario>> grupos) {
-		panelResultados.removeAll();
+	    panelResultados.removeAll();
 
-		int g = 1;
-		for (List<Usuario> grupo : grupos) {
-			JPanel grupoPanel = new JPanel();
-			grupoPanel.setLayout(new BoxLayout(grupoPanel, BoxLayout.Y_AXIS));
-			grupoPanel.setBorder(BorderFactory.createTitledBorder("Grupo " + g));
-			grupoPanel.setBackground(new Color(230, 240, 255));
+	    List<String> resumenes = controlador.obtenerResumenGrupos(grupos);
 
-			// Mostrar usuarios
-			for (Usuario u : grupo) {
-				grupoPanel.add(new JLabel("• " + u.getNombre()));
-			}
+	    for (String textoGrupo : resumenes) {
+	        JTextArea areaTexto = new JTextArea(textoGrupo);
+	        areaTexto.setEditable(false);
+	        areaTexto.setFont(new Font("Arial", Font.PLAIN, 14));
+	        areaTexto.setBackground(new Color(240, 245, 255));
+	        areaTexto.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-			// Calcular promedios
-			Estadistica agrupador = new Estadistica(grupo);
-			
-			// Mostrar estadisticas debajo
-			grupoPanel.add(new JLabel("Promedio Tango: " + agrupador.getPromedioTango()));
-			grupoPanel.add(new JLabel("Promedio Folklore: " + agrupador.getPromedioFolklore()));
-			grupoPanel.add(new JLabel("Promedio Rock: " + agrupador.getPromedioRock()));
-			grupoPanel.add(new JLabel("Promedio Urbano: " + agrupador.getPromedioUrbano()));
+	        JPanel panelGrupo = new JPanel(new BorderLayout());
+	        panelGrupo.setBorder(BorderFactory.createLineBorder(new Color(180, 200, 230)));
+	        panelGrupo.add(areaTexto, BorderLayout.CENTER);
 
-			// Envolver en contenedor que ocupa todo el ancho
-			JPanel contenedor = new JPanel(new BorderLayout());
-			contenedor.add(grupoPanel, BorderLayout.CENTER);
+	        panelResultados.add(panelGrupo);
+	    }
 
-			panelResultados.add(contenedor);
-			g++;
-		}
-
-		panelResultados.revalidate();
-		panelResultados.repaint();
+	    panelResultados.revalidate();
+	    panelResultados.repaint();
 	}
+
 
 
 }
