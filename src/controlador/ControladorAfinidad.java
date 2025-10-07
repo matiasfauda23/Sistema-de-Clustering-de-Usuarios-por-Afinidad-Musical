@@ -5,7 +5,6 @@ import java.util.List;
 import logica.Grafo;
 import logica.Usuario;
 import interfaz.GrafoVisual; // cambiar de package
-import logica.UnionFind;
 import logica.ArchivoJSON;
 import logica.Arista;
 

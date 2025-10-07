@@ -8,12 +8,11 @@ import controlador.ControladorAfinidad;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
-import interfaz.GrafoVisual;
 
 
 public class VentanaPrincipal extends JFrame {
@@ -149,45 +148,10 @@ public class VentanaPrincipal extends JFrame {
 			    } catch (IllegalArgumentException ex) {
 			        JOptionPane.showMessageDialog(this, ex.getMessage());
 			    }
-			});
-//			        
-//			            
-//			            System.setProperty("org.graphstream.ui", "swing");
-//			            
-//			            GrafoVisual grafoVisual = new GrafoVisual();
-//			            Grafo grafo = new Grafo(controlador.getUsuarios());
-//			            
-//			            // Agregar nodos
-//			            for (Usuario usuario : controlador.getUsuarios()) {
-//			                grafoVisual.agregarNodo(usuario.getNombre(), usuario.getNombre());
-//			            }
-//			            
-//			            // Obtener AGM y dividirlo en k grupos
-//			            List<Arista> agm = grafo.kruskal();
-//			            
-//			            // Eliminar las (k-1) aristas más pesadas
-//			            for (int i = 0; i < grupos - 1; i++) {
-//			                grafo.eliminarAristaMayorPeso(agm);
-//			            }
-//			            
-//			            // Agregar las aristas restantes
-//			            int contador = 0;
-//			            for (Arista arista : agm) {
-//			                String nodo1 = arista.getUsuario1().getNombre();
-//			                String nodo2 = arista.getUsuario2().getNombre();
-//			                double peso = arista.getPeso();
-//			                
-//			                grafoVisual.agregarAristaConPeso("arista" + contador, nodo1, nodo2, peso);
-//			                contador++;
-//			            }
-//			            grafoVisual.mostrar();		            		         
+			});		            		         
 			    }
-			
-	
-    //crea el grafo visual y lo muestra (revisar si se puede cambiar el metodo)
 
-
-	//Metodos auxiliares
+	// Pedir valor entre 1 y 5
 	private int pedirValor(String genero) {
 		while (true) {
 			String input = JOptionPane.showInputDialog(this, "Interés en " + genero + " (1-5):");
@@ -201,37 +165,51 @@ public class VentanaPrincipal extends JFrame {
 
 	private JPanel crearPanelUsuarios() {
 	    modeloUsuarios = new DefaultListModel<>();
-	    listaUsuarios = new JList<>(modeloUsuarios);
-	    listaUsuarios.setFont(new Font("Arial", Font.PLAIN, 14)); 
+	    listaUsuarios = crearListaUsuarios();
 	    JScrollPane scrollUsuarios = new JScrollPane(listaUsuarios);
 
-	    // Boton con fuente personalizada
-	    btnAgregarUsuario = new JButton("Agregar Usuario");
-	    btnAgregarUsuario.setFont(new Font("Verdana", Font.BOLD, 14));
-	    btnAgregarUsuario.setBackground(new Color(180, 210, 250));
-	    btnAgregarUsuario.setFocusPainted(false);
-	    
-	    // Boton para cargar usuario desde archivo JSON
-	    btnCargar = new JButton("Cargar desde JSON");
-	    btnCargar.setFont(new Font("Verdana", Font.BOLD, 14));
-	    btnCargar.setBackground(new Color(180, 210, 250));
-	    btnCargar.setFocusPainted(false);
+	    JLabel lblUsuarios = crearLabelUsuarios();
 
-	    // Label con fuente y color personalizados
-	    JLabel lblUsuarios = new JLabel("Usuarios cargados:");
-	    lblUsuarios.setFont(new Font("Arial", Font.BOLD, 16));
-	    lblUsuarios.setForeground(Color.DARK_GRAY);
+	    // Crear botones con metodos auxiliares
+	    btnAgregarUsuario = crearBoton("Agregar Usuario");
+	    btnCargar = crearBoton("Cargar desde JSON");
 
-	    // Panel izquierdo con fondo azul claro
+	    // Panel para apilar botones (2 o mas filas)
+	    JPanel panelBotones = crearPanelBotones(btnAgregarUsuario, btnCargar);
+
+	    // Panel izquierdo principal
 	    JPanel panelIzq = new JPanel(new BorderLayout());
 	    panelIzq.setBackground(new Color(200, 230, 255));
 
 	    panelIzq.add(lblUsuarios, BorderLayout.NORTH);
 	    panelIzq.add(scrollUsuarios, BorderLayout.CENTER);
-	    panelIzq.add(btnAgregarUsuario, BorderLayout.SOUTH);
-	    panelIzq.add(btnCargar, BorderLayout.NORTH);
+	    panelIzq.add(panelBotones, BorderLayout.SOUTH);
 
 	    return panelIzq;
+	}
+
+
+	//Metodos auxiliares 
+
+	private JList<String> crearListaUsuarios() {
+		JList<String> lista = new JList<>(modeloUsuarios);
+	    lista.setFont(new Font("Arial", Font.PLAIN, 14));
+	    return lista;
+	}
+	private JLabel crearLabelUsuarios() {
+	    JLabel lbl = new JLabel("Usuarios cargados:");
+	    lbl.setFont(new Font("Arial", Font.BOLD, 16));
+	    lbl.setForeground(Color.DARK_GRAY);
+	    return lbl;
+	}
+
+	private JButton crearBoton(String texto) {
+	    JButton btn = new JButton(texto);
+	    btn.setFont(new Font("Verdana", Font.BOLD, 14));
+	    btn.setBackground(new Color(180, 210, 250));
+	    btn.setFocusPainted(false);
+	    btn.setBorder(BorderFactory.createLineBorder(new Color(120, 150, 200)));
+	    return btn;
 	}
 
 
@@ -268,6 +246,17 @@ public class VentanaPrincipal extends JFrame {
 
 	    return panelDer;
 	}
+	
+	private JPanel crearPanelBotones(JButton... botones) {
+	    JPanel panel = new JPanel(new GridLayout(botones.length, 1, 5, 5));
+	    panel.setBackground(new Color(200, 230, 255));
+
+	    for (JButton b : botones) {
+	        panel.add(b);
+	    }
+	    return panel;
+	}
+
 
 	private void mostrarGrupos(List<List<Usuario>> grupos) {
 		panelResultados.removeAll();
