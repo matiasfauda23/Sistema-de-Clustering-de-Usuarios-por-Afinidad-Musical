@@ -61,6 +61,13 @@ public class VentanaPrincipal extends JFrame {
 	}
 	//Interaccion entre usuario y controlador
 	private void eventos() {
+		eventoAgregarUsuario();
+		eventoEjecutarAlgoritmo();
+		eventoCargarJSON();
+		eventoAGM();     		        
+	}
+	
+	private void eventoAgregarUsuario() {
 		// Agregar usuario y sus valores
 		btnAgregarUsuario.addActionListener(e -> {
 			String nombre = JOptionPane.showInputDialog(this, "Nombre:");
@@ -78,7 +85,9 @@ public class VentanaPrincipal extends JFrame {
 				modeloUsuarios.addElement(nombre);
 			}
 		});
-
+	}
+	
+	private void eventoEjecutarAlgoritmo(){
 		// Ejecutar algoritmo y mostrar grupos
 		btnEjecutarAlgoritmo.addActionListener(e -> {
 			if (controlador.getUsuarios().size() < 2) {
@@ -109,7 +118,9 @@ public class VentanaPrincipal extends JFrame {
 				JOptionPane.showMessageDialog(this, "Debe ingresar un número válido.");
 			}
 		});
-			
+	}
+	
+	private void eventoCargarJSON() {
 		// Cargar usuario desde archivo JSON		
 		btnCargar.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
@@ -139,17 +150,18 @@ public class VentanaPrincipal extends JFrame {
 		        }
 		    }
 		});
-		
-		
-			btnMostrarAGM.addActionListener(e -> {
-			    try {
-			        GrafoVisual grafo = controlador.obtenerGrafoVisualDividido(controlador.getNumeroGrupos());
-			        grafo.mostrar();
-			    } catch (IllegalArgumentException ex) {
-			        JOptionPane.showMessageDialog(this, ex.getMessage());
-			    }
-			});		            		         
-			    }
+	}
+	
+	private void eventoAGM() {
+		btnMostrarAGM.addActionListener(e -> {
+		    try {
+		        GrafoVisual grafo = controlador.obtenerGrafoVisualDividido(controlador.getNumeroGrupos());
+		        grafo.mostrar();
+		    } catch (IllegalArgumentException ex) {
+		        JOptionPane.showMessageDialog(this, ex.getMessage());
+		    }
+		});	
+	}
 
 	// Pedir valor entre 1 y 5
 	private int pedirValor(String genero) {
