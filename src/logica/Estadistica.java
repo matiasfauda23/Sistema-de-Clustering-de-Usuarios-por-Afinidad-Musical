@@ -20,6 +20,14 @@ public class Estadistica {
         double sumT = 0, sumF = 0, sumR = 0, sumU = 0;
         int n = grupo.size();
 
+        if (n == 0) {
+            promedioTango = 0;
+            promedioFolklore = 0;
+            promedioRock = 0;
+            promedioUrbano = 0;
+            return;
+        }
+
         for (Usuario u : grupo) {
             sumT += u.getValorTango();
             sumF += u.getValorFolklore();
