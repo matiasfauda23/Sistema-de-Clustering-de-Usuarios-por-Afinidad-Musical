@@ -34,6 +34,19 @@ public class ControladorAfinidad {
         int cantidadUsuarios = usuarios.size();
         return k >= 1 && k <= cantidadUsuarios;
     }
+    
+    public boolean validarCantidadGrupos(String input) {
+        try {
+            int k = Integer.parseInt(input);
+            return k >= 1 && k <= usuarios.size();
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+    public int convertirCantidadGrupos(String input) { //pasa de string a int
+        return Integer.parseInt(input);
+    }
+
 
     
     public GrafoVisual obtenerGrafoVisualDividido(int k) {

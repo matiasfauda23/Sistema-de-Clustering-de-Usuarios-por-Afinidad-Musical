@@ -89,7 +89,7 @@ public class VentanaPrincipal extends JFrame {
 
 			String input = JOptionPane.showInputDialog(this, "¿Cuántos grupos desea generar?");
 			try {
-				int k = Integer.parseInt(input);
+				int k = controlador.convertirCantidadGrupos(input);
 				controlador.setNumeroGrupos(k); // Valor predeterminado
 
 				if (!controlador.esNumeroDeGruposValido(k)) {

@@ -29,4 +29,11 @@ public class ControladorAfinidadTest {
         assertFalse(controlador.esNumeroDeGruposValido(4));
         assertFalse(controlador.esNumeroDeGruposValido(-1));
     }
+    
+    @Test
+    public void testConvertirCantidadGrupos() {
+        ControladorAfinidad controlador = new ControladorAfinidad();
+        int resultado = controlador.convertirCantidadGrupos("2");
+        assertEquals(2, resultado);
+    }
 }
