@@ -2,9 +2,6 @@ package logica;
 
 import java.util.List;
 
-
-
-
 public class Estadistica {
 
     private double promedioTango;
@@ -43,10 +40,13 @@ public class Estadistica {
 
     public double getPromedioTango()     {
     	return promedioTango; }
+    
     public double getPromedioFolklore()  { 
     	return promedioFolklore; }
+    
     public double getPromedioRock()      { 
     	return promedioRock; }
+    
     public double getPromedioUrbano()    { 
     	return promedioUrbano; }
 }

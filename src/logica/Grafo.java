@@ -3,11 +3,10 @@ package logica;
 import java.util.*;
 
 public class Grafo {
-    //Como son conjuntos de usuarios y aristas, lo mejor es usar listas
+	
     private List<Usuario> usuarios;
     private List<Arista> aristas;
     
-    //Constructor, solo recibe la lista de usuarios, las aristas se generan a partir de los usuarios
     public Grafo(List<Usuario> usuarios) {
         this.usuarios = usuarios;
         this.aristas = new ArrayList<>();
@@ -33,7 +32,6 @@ public class Grafo {
                Math.abs(a.getValorUrbano() - b.getValorUrbano());
     }
    
-    // Divide el MST en dos grupos al eliminar la arista de mayor peso
     public List<List<Usuario>> obtenerGrupos(int k) {
     	
         if (k < 1 || k > usuarios.size()) {
@@ -65,21 +63,7 @@ public class Grafo {
 
         return new ArrayList<>(grupos.values());
     }
-    
-    
-    
-  /*  // Comparator de mayor a menor
-    public static final Comparator<Arista> POR_PESO_DESC =
-        new Comparator<Arista>() {
-            @Override
-            public int compare(Arista a, Arista b) {
-                return Integer.compare(b.getPeso(), a.getPeso());
-            }
-        };*/
- 
-
-    
-    // Algoritmo de Kruskal para árbol generador mínimo
+       
     public List<Arista> kruskal() {
         // Ordenar las aristas por peso (similaridad) de menor a mayor
         List<Arista> aristasOrdenadas = new ArrayList<>(aristas);

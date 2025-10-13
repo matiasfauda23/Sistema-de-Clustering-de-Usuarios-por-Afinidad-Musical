@@ -3,15 +3,10 @@ package logica;
 import java.util.*;
 
 public class UnionFind {
-    // Mapa que guarda el "padre" de cada usuario
     private Map<Usuario, Usuario> padre;
 
-    // Mapa que guarda la "altura aproximada" del árbol (para optimizar la unión)
     private Map<Usuario, Integer> altura;
 
-    /**
-     * Constructor: inicializa cada usuario como su propio conjunto
-     */
     public UnionFind(List<Usuario> usuarios) {
         padre = new HashMap<>();
         altura = new HashMap<>();
@@ -22,24 +17,14 @@ public class UnionFind {
         }
     }
 
-    /**
-     * Método find:
-     * Devuelve la raíz del conjunto al que pertenece el usuario.
-     * Aplica "compresión de caminos" para que cada usuario
-     * apunte directamente a la raíz → más eficiencia.
-     */
     public Usuario encontrarRaiz(Usuario u) {
         if (padre.get(u) != u) {
-            padre.put(u, encontrarRaiz(padre.get(u))); // compresión de caminos
+            padre.put(u, encontrarRaiz(padre.get(u)));
         }
         return padre.get(u);
     }
 
-    /**
-     * Método union:
-     * Une los conjuntos de dos usuarios, si son diferentes.
-     * Usa "union by rank" → el árbol más bajo se cuelga del más alto.
-     */
+
     public void unir(Usuario u1, Usuario u2) {
         Usuario raiz1 = encontrarRaiz(u1);
         Usuario raiz2 = encontrarRaiz(u2);
@@ -59,9 +44,6 @@ public class UnionFind {
         }
     }
 
-    /**
-     * Método para verificar si dos usuarios pertenecen al mismo conjunto
-     */
     public boolean estanConectados(Usuario u1, Usuario u2) {
         return encontrarRaiz(u1) == encontrarRaiz(u2);
     }

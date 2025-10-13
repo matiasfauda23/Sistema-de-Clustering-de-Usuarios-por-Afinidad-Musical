@@ -78,7 +78,6 @@ public class VentanaPrincipal extends JFrame {
 				int rock = pedirValor("Rock");
 				int urbano = pedirValor("Urbano");
 
-				// Agregrego usuarios con sus valores al controlador
 				controlador.agregarUsuario(nombre, tango, folklore, rock, urbano);
 
 				// Solo actualizo la vista
@@ -86,40 +85,7 @@ public class VentanaPrincipal extends JFrame {
 			}
 		});
 	}
-	
-//	private void eventoEjecutarAlgoritmo(){
-//		// Ejecutar algoritmo y mostrar grupos
-//		btnEjecutarAlgoritmo.addActionListener(e -> {
-//			if (controlador.getUsuarios().size() < 2) {
-//				JOptionPane.showMessageDialog(this, "Debe haber al menos 2 usuarios.");
-//				return;
-//			}
-//
-//			String input = JOptionPane.showInputDialog(this, "¿Cuántos grupos desea generar?");
-//			try {
-//				int k = controlador.convertirCantidadGrupos(input);
-//				controlador.setNumeroGrupos(k); // Valor predeterminado
-//
-//				if (!controlador.esNumeroDeGruposValido(k)) {
-//				    JOptionPane.showMessageDialog(this, "Número de grupos inválido.");
-//				    return;
-//				}
-//
-//
-//				List<List<Usuario>> grupos = controlador.calcularGrupos(k);
-//
-//				// Delego la visualizacion a metodo externo
-//				mostrarGrupos(grupos);
-//				
-//				// Habilitar boton para mostrar AGM
-//				btnMostrarAGM.setEnabled(true);
-//
-//			} catch (NumberFormatException ex) {
-//				JOptionPane.showMessageDialog(this, "Debe ingresar un número válido.");
-//			}
-//		});
-//	}
-	
+		
 	private void eventoEjecutarAlgoritmo() {
 	    btnEjecutarAlgoritmo.addActionListener(e -> {
 	        if (controlador.getUsuarios().size() < 2) {
@@ -234,7 +200,7 @@ public class VentanaPrincipal extends JFrame {
 
 	    JLabel lblResultado = crearLabelResultado();
 	    btnEjecutarAlgoritmo = crearBoton("Ejecutar Algoritmo");
-	    btnMostrarAGM = crearBoton("Mostrar AGM");
+	    btnMostrarAGM = crearBoton("Mostrar Grafo Animado");
 
 	    // Panel para apilar botones
 	    JPanel panelBotones = crearPanelBotones(btnEjecutarAlgoritmo, btnMostrarAGM);
