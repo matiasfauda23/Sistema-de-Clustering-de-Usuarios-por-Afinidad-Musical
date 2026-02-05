@@ -19,7 +19,7 @@ Aplicación de escritorio desarrollada en Java que utiliza algoritmos de Teoría
 ![Interfaz Principal](screenshots/Promedio.png)
 *Panel principal dividido con JSplitPane: Carga de usuarios a la izquierda y controles de agrupación a la derecha.*
 
-![Visualización del Grafo](screenshots/Grafo animado.png)
+![Visualización del Grafo](screenshots/Grafoanimado.png)
 *Representación visual del AGM generado por GraphStream, donde cada color representa un cluster de afinidad.*
 
 ## Estructura del Proyecto:
