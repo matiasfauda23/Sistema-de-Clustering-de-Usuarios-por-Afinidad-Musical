@@ -37,4 +37,4 @@ Aplicación de escritorio desarrollada en Java que utiliza algoritmos de Teoría
 
 ---
 **Autor:** [Matias Fauda] - [Tu LinkedIn]
-*Proyecto académico realizado en colaboración con: Tobias Cabral, Mateo Smicht y Alan Valdiviezo (UNGS).*
+*Proyecto académico realizado en colaboración con compañeros de la univeridad (UNGS).*
