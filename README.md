@@ -16,10 +16,10 @@ Aplicación de escritorio desarrollada en Java que utiliza algoritmos de Teoría
 - **Estructuras de Datos:** Grafos, Aristas Ponderadas, Disjoint Set Union (DSU).
 
 ## Capturas:
-![Interfaz Principal](screenshots/main_ui.png)
+![Interfaz Principal](screenshots/Promedio.png)
 *Panel principal dividido con JSplitPane: Carga de usuarios a la izquierda y controles de agrupación a la derecha.*
 
-![Visualización del Grafo](screenshots/graph_viz.png)
+![Visualización del Grafo](screenshots/Grafo animado.png)
 *Representación visual del AGM generado por GraphStream, donde cada color representa un cluster de afinidad.*
 
 ## Estructura del Proyecto:
